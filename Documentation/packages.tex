@@ -1,0 +1,84 @@
+%% SPRACHE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%--------------- DEUTSCH
+%\usepackage[ngerman]{babel} 
+%\usepackage[T1]{fontenc}  
+%\usepackage[latin1]{inputenc} 
+% Wenn Sie Fehler wie Textcurrency Unavailable o.ä. erhalten, speichern Sie die Datei unter einer anderen Formatierung ab (z.B. ANSI)
+
+%--------------- ENGLISCH
+\usepackage[USenglish]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[latin1]{inputenc}
+
+%% AUSSEHEN %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{bera}
+\usepackage[charter]{mathdesign} % Schriftart
+%\usepackage{chngcntr} % Change Counter Package
+\usepackage{abstract} % Abstract benutzen
+\usepackage{microtype} % verbessert Textverteilung
+\usepackage{multicol} % Mehrspaltige Abschnitte
+\setlength{\columnsep}{.5cm}
+\usepackage[symbol,perpage]{footmisc}
+\setfnsymbol{lamport}
+
+%% GRAFIKEN %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{graphicx} % Einbinden von Grafiken ( .jpg  .png  .pdf  .mps)
+%--------------- TIKZ Umgebung (zum Zeichnen von Grafiken in Latex
+\usepackage{epstopdf}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows,shapes,positioning,shadows,calc,intersections}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.8}
+\usepackage{marginnote}
+\usepackage{caption}
+
+
+%% Math Packages %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{amsmath}
+\usepackage{amsthm}
+%\usepackage{amsfonts}
+
+%% NOMENKLATUR %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{nomencl}
+\let\abk\nomenclature
+\makenomenclature
+\usepackage{etoolbox}
+\patchcmd{\thenomenclature}{\section*{\nomname}}
+    {\begin{multicols}{2}[\section*{\nomname}]}{}{}
+\patchcmd{\endthenomenclature}{\endlist}{\endlist\end{multicols}}{}{}
+
+%% MATLAB CODE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[framed]{matlab-prettifier}
+\lstset{
+  style              = Matlab-editor,
+  basicstyle         = \scriptsize\ttfamily
+  }
+
+%% BIBLIOGRAPHIE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{etoolbox}
+\usepackage[square,numbers]{natbib}
+\makeatletter
+%\renewcommand*{\NAT@nmfmt}[1]{\textsc{#1}}
+%\def\NAT@nmfmt#1{\textsc{#1}}
+\patchcmd{\NAT@test}{\else\NAT@nm}{\else\NAT@nmfmt{\NAT@nm}}{}{}
+\let\NAT@up\scshape
+\makeatother
+%\renewcommand{\citenumfont}[1]{\textsc{#1}}
+
+
+%% ZEILENABSTÄNDE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\usepackage{setspace}
+%\singlespacing        %% 1-spacing (default)
+%\onehalfspacing       %% 1,5-spacing
+%\doublespacing        %% 2-spacing
+
+% End Paragraph Command
+\newcommand{\parend}{\\\hspace*{\fill}} % \hspace*{\fill} füllt die durch \\ von Latex erwartete nächste Zeile und verhindert so die "`zu leere Box"'
+
+%% HYPERREF-PACKAGE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[colorlinks=true, urlcolor=black, linkcolor=black, citecolor=black, bookmarksnumbered=true, bookmarksopenlevel=0, pdfpagelabels=false]{hyperref} % URL
+\def\UrlBreaks{\do\-\do\_\do\+\do\/\do\a\do\b\do\c\do\d\do\e\do\f\do\g\do\h\do\i\do\j\do\k\do\l%
+\do\m\do\n\do\o\do\p\do\q\do\r\do\s\do\t\do\u\do\v\do\w\do\x\do\y\do\z\do\0%
+\do\1\do\2\do\3\do\4\do\5\do\6\do\7\do\8\do\9}
+

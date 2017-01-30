@@ -1,0 +1,54 @@
+\begin{tikzpicture}[auto,>=stealth,node distance=2.5cm,
+function/.style={
+draw=black,
+rounded rectangle,
+minimum size=6mm,
+font=\ttfamily,
+thick,
+}
+]
+\node [function,name path=cellSize]  (cellSize)  {cellSize};
+\node[above=1cm of cellSize, name path=input]  (input){};
+\node at (-5:6cm) [function,name path=CellSizecorr] (CellSizecorr){CellSizecorr};
+\node at (-110:7.5cm) [function,name path=induction](induction){induction};
+\node [function,above=4.2cm of induction.west,xshift=-0.5cm,name path=reactor](reactor){reactor\_isoV};
+\node [function, right=4cm of reactor, name path=CJvelocity](CJvelocity){CJvelocity};
+\node [function, right=1.5cm of CJvelocity, name path=PostShockCantera](PostShockCantera){PostShockCantera};
+
+
+\draw[->,very thick, color=Blue]  ([xshift=1.5pt] input.south)  -- node {$p,T,X,\texttt{mech}$} ([xshift=1.5pt]cellSize.north);
+\draw[->,very thick, color=OliveGreen]  ([xshift=-1.5pt]cellSize.north) -- node {$\lambda$} ([xshift=-1.5pt] input.south);
+\foreach \i/\j/\k/\l in{%
+									cellSize/CellSizecorr/{\varepsilon_I,\Delta_I,\dot{\sigma}_{\mathrm{max}},u'_{\mathrm{CJ}}}/{\lambda},
+									cellSize/induction/{p,T,X,\texttt{mech}}/{\tau_I,\dot{\sigma}_{\mathrm{max}},V_{\mathrm{CJ}}},
+									cellSize/PostShockCantera/{p,T,X,\texttt{mech},V_{\mathrm{CJ}}}/{p_{\mathrm{vN}},T_{\mathrm{vN}}},
+									cellSize/CJvelocity/{$\hspace{-5pt}$p,T,X,\texttt{mech}}/{V_{\mathrm{CJ}},\mathit{CJstate}$\hspace{-10pt}$},
+									cellSize/reactor/{$\hspace{-15pt}$p_{\mathrm{vN}},T_{\mathrm{vN}},X,\texttt{mech}}/{\tau_I,\dot{\sigma}_{\mathrm{max}}},
+									induction/PostShockCantera/{p,T,X,\texttt{mech},V_{\mathrm{CJ}}}/{p_{\mathrm{vN}},T_{\mathrm{vN}}},
+									induction/CJvelocity/{p,T,X,\texttt{mech}}/V_{\mathrm{CJ}},
+									induction/reactor/{p_{\mathrm{vN}},T_{\mathrm{vN}},X,\texttt{mech}}/{\tau_I,\dot{\sigma}_{\mathrm{max}}}
+									} 
+		%\draw[very thick] (\i)  -- node[above] {\tiny{in: $\k$}} node[below] {\tiny{out: $\l$}} (\j) ;
+		{
+		\path [name path=in] let \p1 = ($(\j)-(\i)$) in (\i) ($(\i)!1.5pt!($(\i)+(-\y1,\x1)$)$) to +(\p1);
+		\path [name path=out] let \p1 = ($(\i)-(\j)$) in (\j) ($(\j)!1.5pt!($(\j)+(-\y1,\x1)$)$) to +(\p1);
+		\node [name intersections={of={\i} and in}] (tmp) at (intersection-1){};
+		\draw [->, very thick, name intersections={of={\j} and in},color=Blue] (tmp.center) -- node[midway,sloped] {\scriptsize{$\k$}} (intersection-1);
+		\node [name intersections={of={\j} and out}] (tmp) at (intersection-1){};
+		\draw [->, very thick, name intersections={of={\i} and out},color=OliveGreen] (tmp.center) -- node[midway, sloped] {\scriptsize{$\l$}} (intersection-1);
+		}
+\end{tikzpicture}
+
+\abk[zl]{$\lambda$}{Detonation cell size (m)}
+\abk[p]{$p$}{Pressure (Pa)}
+\abk[t]{$T$}{Temperature (K)}
+\abk[m]{$\texttt{mech}$}{Name of chemical kinetic mechanism used in \emph{Cantera}}
+\abk[x]{$X$}{Mixture mole fraction}
+\abk[zt]{$\tau_{\mathrm{I}}$}{Induction time (s)}
+\abk[p]{$p_{\mathrm{vN}}$}{von Neumann pressure (Pa)}
+\abk[t]{$T_{\mathrm{vN}}$}{von Neumann temperature (K)}
+\abk[v]{$V_{\mathrm{CJ}}$}{Detonation shock velocity (m/s)}
+\abk[zs]{$\dot{\sigma}_{\mathrm{max}}$}{Maximum heat release rate (1/s)}
+\abk[u]{$u'_{\mathrm{CJ}}$}{CJ particle velocity in a shock-attached frame (m/s)}
+\abk[zd]{$\Delta_{\mathrm{I}}$}{Induction zone length (m)}
+\abk[ze]{$\varepsilon_{\mathrm{I}}$}{Normalized activation energy of the induction process}
