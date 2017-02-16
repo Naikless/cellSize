@@ -35,7 +35,7 @@ end
 
 set(gas,'P',P1,'T',T1,'X',X1);
 
-M1 = meanMolarMass(gas);
+M1 = meanMolecularWeight(gas);
 h1 = enthalpy_mass(gas);
 
 P = 15 * P1;
@@ -53,7 +53,7 @@ for i=1:3
     
     set(gas, 'T',T, 'P',P, 'X',X1);
     equilibrate(gas,'TP');
-    M2 = meanMolarMass(gas);
+    M2 = meanMolecularWeight(gas);
     alpha = T1/T * M2/M1;
     [gamma_s , cp_eq] = partDeriv( T, P, X1, gas );  
     P = P1 * (1+gamma_s)/(2*gamma_s*alpha) * ...
@@ -69,7 +69,7 @@ while 1
     I = I+1;
     set(gas, 'T',T, 'P',P, 'X',X1);
     equilibrate(gas,'TP');
-    M2 = meanMolarMass(gas);
+    M2 = meanMolecularWeight(gas);
     [ gamma_s , cp_eq , Dlvtp, Dlvpt ] = partDeriv( T, P, X1,gas ); 
     alpha = T1/T * M2/M1;
     r = alpha * P/P1;
@@ -142,5 +142,5 @@ set(gas,'T',T, 'P',P, 'X',X);
 equilibrate(gas,'TP');
 
 gamma_s = -(Dlvpt + ...
-    gasconstant * Dlvtp^2 / (cp_eq * meanMolarMass(gas)))^-1;
+    gasconstant * Dlvtp^2 / (cp_eq * meanMolecularWeight(gas)))^-1;
 end

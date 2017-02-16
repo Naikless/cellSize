@@ -28,7 +28,8 @@ set(gas,'P',P_0,'T',T_0,'X',X);
 RHO_0 = density(gas);
 U_0 = intEnergy_mass(gas);
 
-RHO = fsolve(@(RHO) hugoniotEnergyFunctional(gas, RHO_0, P_0, U_0, shockSpeed, RHO), 15, optimset('Display', 'off', 'TolFun', eps, 'TolX', eps));
+RHO = fzero(@(RHO) hugoniotEnergyFunctional(gas, RHO_0, P_0, U_0, shockSpeed, RHO), 15, optimset('Display', 'off', 'TolFun', eps, 'TolX', eps));
+
 rayleighPressure = P_0 - (shockSpeed*RHO_0)^2 * (1/RHO - 1/RHO_0);
 energy = (rayleighPressure + P_0) * (1/RHO_0 - 1/RHO) / 2 + U_0;
 

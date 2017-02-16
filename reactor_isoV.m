@@ -63,14 +63,14 @@ y=z(2:end-1); % mass fractions
 
 set(g,'T',T,'Density',rho,'Y',y); %update gas
 
-Ms  = molecularWeights(g);
+Ms  = meanMolecularWeight(g);
 dy = ydot(g); % = netProdRates(g).*Ms/rho; change in mass fraction
 ui  = (enthalpies_RT(g) - 1) *gasconstant * T ./ Ms; % specific internal energies
 cv  = cv_mass(g); % specific heat
 
 dT  = - sum(ui .* dy)/cv; % change in temperature
 
-dsigma = sum ((meanMolarMass(g)./ Ms - enthalpies_RT(g) * gasconstant /  cp_mole(g)) .* dy);
+dsigma = sum ((meanMolecularWeight(g)./ Ms - enthalpies_RT(g) * gasconstant /  cp_mole(g)) .* dy);
 
 
 dzdt=[dT;dy;dsigma]; % return
