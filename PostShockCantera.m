@@ -14,6 +14,13 @@ function [ P_vN, T_vN ] = PostShockCantera(P_0, T_0, X, mech, shockSpeed)
 % OUTPUT:
 % P_vN = von Neumann pressure in (Pa)
 % T_vN = von Neumann temperature in (K)
+%
+% ATTENTION: succesful solving for the Hugoniot energy functional strongly
+% depends on an appropriate choice of the initial value for post-shock
+% density RHO! RHO_init must be greater than the expected RHO, so 
+% RHO_init = 15 has been chosen as default value. However, this value might
+% have to be decreased for very weak shocks (due to dillution, very rich 
+% mixtures, etc.)
 
 try 
     gas = importPhase([mech '.xml']);
@@ -28,7 +35,8 @@ set(gas,'P',P_0,'T',T_0,'X',X);
 RHO_0 = density(gas);
 U_0 = intEnergy_mass(gas);
 
-RHO = fzero(@(RHO) hugoniotEnergyFunctional(gas, RHO_0, P_0, U_0, shockSpeed, RHO), 15, optimset('Display', 'off', 'TolFun', eps, 'TolX', eps));
+RHO_init = 15; % choose wisely, see above!
+RHO = fzero(@(RHO) hugoniotEnergyFunctional(gas, RHO_0, P_0, U_0, shockSpeed, RHO), RHO_init, optimset('Display', 'off', 'TolFun', eps, 'TolX', eps));
 
 rayleighPressure = P_0 - (shockSpeed*RHO_0)^2 * (1/RHO - 1/RHO_0);
 energy = (rayleighPressure + P_0) * (1/RHO_0 - 1/RHO) / 2 + U_0;
