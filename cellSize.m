@@ -5,7 +5,7 @@ function [ lambda ] = cellSize( P, T, X, mech )
 % the Rankine-Hugoniot relations to calculate the post shock (von Neumann) state.
 % Induction time is calculated solving ODEs for a zero dimensional, constant volume reactor model.
 % The relation between induction time and detonation cell size is established by a correlation model,
-% described in the work of [Dick, Ju, Lee, 2007].
+% described in the work of [Ng, Ju, Lee, 2007].
 
 % INPUT:
 % P = pressure in (Pa)
