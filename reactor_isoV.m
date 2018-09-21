@@ -23,6 +23,11 @@ catch
 end
 set(gas,'P',P,'T',T,'X',X);
 
+% calculate adiabatic flame temperature
+equilibrate(gas,'UV');
+T_eq = temperature(gas);
+set(gas,'P',P,'T',T,'X',X);
+
 % initial values
 Y0=massFractions(gas);
 T0=temperature(gas);
@@ -30,13 +35,13 @@ rho=density(gas);
 sigma0 = 0;
 
 % ode solver options
-options=odeset('RelTol',1.e-6,'AbsTol',1e-12);
+options=odeset('RelTol',1.e-6,'AbsTol',1e-12, 'Events', @(t,z) terminate(z,T_eq) );
 
 % set initial and final time
-t0=0; tf=1e-5; % you may need to increase tf
+t0=0; tf=0.5e-3; % you may need to increase tf
 
 %% solve ode system
-[t,z]=ode15s(@isoVsigma_ode, [t0 tf], [T0; Y0; sigma0], options, gas, rho);
+[t,z]=ode15s( @(t,z) isoVsigma_ode(z, gas, rho) , [t0 tf], [T0; Y0; sigma0], options);
 
 
 sigma_max = max(gradient(z(:,end),t));
@@ -47,16 +52,16 @@ tau = t(imaxgradT);
 disp(['ignition delay: ' num2str(tau*1e6) ' microseconds'])
 
 %% plot temperature in K
-% if length(t) < imaxgradT + 200
-%     endplot = length(t);
-% else
-%     endplot = imaxgradT + 200;
-% end
-%  figure, plot(t(1:endplot)*1e3,z(1:endplot,1),'k'), xlabel('time (ms)'), ylabel('T (K)')
+if length(t) < imaxgradT + 200
+    endplot = length(t);
+else
+    endplot = imaxgradT + 200;
+end
+ figure(1), plot(t(1:endplot)*1e3,z(1:endplot,1),'k'), xlabel('time (ms)'), ylabel('T (K)')
 
 end
 
-function dzdt = isoVsigma_ode(t,z,g,rho)
+function dzdt = isoVsigma_ode(z,g,rho)
 % RHS for solving constant volume reactor
 T=z(1); % temperature
 y=z(2:end-1); % mass fractions
@@ -75,4 +80,10 @@ dsigma = sum ((meanMolecularWeight(g)./ Ms - enthalpies_RT(g) * gasconstant /  c
 
 dzdt=[dT;dy;dsigma]; % return
 
+end
+
+function [value, isterminal, direction] = terminate(z, T_eq)
+value      = 0.95*T_eq - z(1);
+isterminal = 1;   % Stop the integration
+direction  = 0;
 end
