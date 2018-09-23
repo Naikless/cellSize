@@ -23,10 +23,10 @@ function [ P_vN, T_vN ] = PostShockCantera(P_0, T_0, X, mech, shockSpeed)
 % mixtures, etc.)
 
 try
-    gas = importPhase([mech '.xml']);
+    gas = Solution([mech '.xml']);
 catch
     try
-        gas = importPhase([mech '.cti']);
+        gas = Solution([mech '.cti']);
     catch
         error('Selected mechanism not found!');
     end

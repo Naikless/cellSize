@@ -24,10 +24,10 @@ function [ V_CJ, CJstate ]  = CJvelocity(P1,T1,X1,mech)
 %                        CJstate.uCJ = particle velocity in (m/s)
 
 try 
-    gas = importPhase([mech '.xml']);
+    gas = Solution([mech '.xml']);
 catch
     try
-        gas = importPhase([mech '.cti']);
+        gas = Solution([mech '.cti']);
     catch
         error('Selected mechanism not found!');
     end

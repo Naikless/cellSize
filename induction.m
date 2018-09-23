@@ -14,10 +14,10 @@ function [ tau, sigma_max, shockSpeed ] = induction( P, T, X, mech )
 % shockSpeed = CJ detonation velocity in (m/s)
 
 try 
-    gas = importPhase([mech '.xml']);
+    gas = Solution([mech '.xml']);
 catch
     try
-        gas = importPhase([mech '.cti']);
+        gas = Solution([mech '.cti']);
     catch
         error('Selected mechanism not found!');
     end

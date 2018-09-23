@@ -13,10 +13,10 @@ function [ tau, sigma_max ] = reactor_isoV( P, T, X, mech )
 % sigma_max = maximum normalized heat release in (1/s)
 
 try 
-    gas = importPhase([mech '.xml']);
+    gas = Solution([mech '.xml']);
 catch
     try
-        gas = importPhase([mech '.cti']);
+        gas = Solution([mech '.cti']);
     catch
         error('Selected mechanism not found!');
     end
@@ -38,7 +38,7 @@ sigma0 = 0;
 options=odeset('RelTol',1.e-6,'AbsTol',1e-12, 'Events', @(t,z) terminate(z,T_eq) );
 
 % set initial and final time
-t0=0; tf=0.5e-3; % you may need to increase tf
+t0=0; tf=10; % you may need to increase tf
 
 %% solve ode system
 [t,z]=ode15s( @(t,z) isoVsigma_ode(z, gas, rho) , [t0 tf], [T0; Y0; sigma0], options);

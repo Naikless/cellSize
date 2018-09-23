@@ -17,10 +17,10 @@ function [ lambda ] = cellSize( P, T, X, mech )
 % lambda = detonation cell size in (m)
  
 try 
-    gas = importPhase([mech '.xml']);
+    gas = Solution([mech '.xml']);
 catch
     try
-        gas = importPhase([mech '.cti']);
+        gas = Solution([mech '.cti']);
     catch
         error('Selected mechanism not found!');
     end
